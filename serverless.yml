@@ -16,6 +16,7 @@ provider:
             - "dynamodb:PutItem"
             - "dynamodb:GetItem"
             - "dynamodb:Scan"     
+            - "dynamodb:ListTables"
           Resource: "arn:aws:dynamodb:ap-south-1:102413378525:table/productGroupTableDev"
 
 plugins:
