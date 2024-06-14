@@ -1,0 +1,71 @@
+service: myserverlessproject
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  deploymentBucket:
+    name: serverless-deployment-bucket-backend
+  stage: dev
+  region: ap-south-1
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "dynamodb:PutItem"
+            - "dynamodb:GetItem"
+            - "dynamodb:Scan"     
+          Resource: "arn:aws:dynamodb:ap-south-1:102413378525:table/productGroupTableDev"
+
+plugins:
+  - serverless-webpack
+
+package:
+  individually: true
+
+functions:
+  getUser:
+    handler: lambdas/getUser.handler
+    events:
+      - http:
+          path: get-user/{ID}
+          method: GET
+          cors: true
+  greetUser:
+    handler: lambdas/greetUser.handler
+    events:
+      - http:
+          path: greet-user/{ID}
+          method: GET
+          cors: true
+  addUser:
+    handler: lambdas/addUser.handler
+    events:
+      - http:
+          path: add-user
+          method: POST
+          cors: true
+  getAllUsers:
+    handler: lambdas/getAllUsers.handler
+    events:
+      - http:
+          path: get-all-users
+          method: GET 
+          cors: true
+
+resources:
+  Resources:
+    MyDynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: productGroupTableDev 
+        AttributeDefinitions:
+          - AttributeName: ID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: ID
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
