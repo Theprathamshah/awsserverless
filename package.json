@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "aws-sdk": "^2.1640.0",
+    "serverless-webpack": "^5.14.0",
+    "webpack": "^5.92.0"
+  }
+}
